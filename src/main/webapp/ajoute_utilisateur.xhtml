@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+<head>
+    <title>Ajouter un Utilisateur</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        form {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .error {
+            color: red;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+        .global-messages {
+            color: red;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px;
+            margin-top: 15px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <h:form>
+        <h:messages globalOnly="true" styleClass="global-messages"/>
+        
+        <h:outputLabel for="username" value="Nom d'utilisateur :" />
+        <h:inputText id="username" value="#{utilisateurBean.username}" required="true"/>
+
+        <h:outputLabel for="email" value="Email :" />
+        <h:inputText id="email" value="#{utilisateurBean.email}" required="true"/>
+
+        <h:outputLabel for="password" value="Mot de passe :" />
+        <h:inputSecret id="password" value="#{utilisateurBean.password}" required="true"/>
+
+        <h:outputLabel for="confirmPassword" value="Confirmer le mot de passe :" />
+        <h:inputSecret id="confirmPassword" value="#{utilisateurBean.confirmPassword}" required="true"/>
+
+        <h:outputLabel for="description" value="Description :" />
+        <h:inputTextarea id="description" value="#{utilisateurBean.description}"/>
+             <!-- Affichage des messages globaux (erreurs et succès) -->
+        <h:messages globalOnly="true" style="color: red;" /><br/>
+
+        <h:commandButton value="Ajouter" action="#{utilisateurBean.ajouterUtilisateur}" styleClass="button"/>
+    </h:form>
+</body>
+</html>
