@@ -41,6 +41,8 @@ public class UtilisateurEntrepriseBean {
         }
     }
 
+    
+    
     public Utilisateur trouverUtilisateurParId(Long id) {
         return em.find(Utilisateur.class, id);
     }
@@ -68,5 +70,19 @@ public class UtilisateurEntrepriseBean {
     // Méthode pour vérifier un mot de passe 
     public boolean verifierMotDePasse(String password, String hashedPassword)
     { return BCrypt.checkpw(password, hashedPassword); }
+
+    public Utilisateur authentifier(String email,String password){
+    Utilisateur user =trouverUtilisateurParEmail(email);
+        if(user!=null && verifierMotDePasse(password,user.getPassword())){
+            return user;
+        }
+        return null;
+    
+    }
+
+    @Transactional
+    public void mettreAJourUtilisateur(Utilisateur utilisateur) {
+        em.merge(utilisateur);
+    }
 
 }

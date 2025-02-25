@@ -19,7 +19,8 @@ public class NavigationBean {
     public void voirApropos(){
         try{
             FacesContext.getCurrentInstance().getExternalContext()
-                    .redirect("a_propos.xhtml");
+                    .redirect(
+                            "pages/a_propos.xhtml");
         } catch(IOException e){
             e.printStackTrace();
         }
@@ -27,7 +28,7 @@ public class NavigationBean {
     public void lieu(){
         try{
             FacesContext.getCurrentInstance().getExternalContext()
-                    .redirect("lieu.xhtml");
+                    .redirect("pages/lieu.xhtml");
         } catch(IOException e){
             e.printStackTrace();
         }
@@ -36,7 +37,7 @@ public class NavigationBean {
     public void visiter(){
         try{
             FacesContext.getCurrentInstance().getExternalContext()
-                    .redirect("visite.xhtml");
+                    .redirect("pages/visite.xhtml");
         } catch(IOException e){
             e.printStackTrace();
         }
@@ -45,7 +46,7 @@ public class NavigationBean {
         public void retour(){
         try{
             FacesContext.getCurrentInstance().getExternalContext()
-                    .redirect("home.xhtml");
+                    .redirect("/home.xhtml");
         } catch(IOException e){
             e.printStackTrace();
         }

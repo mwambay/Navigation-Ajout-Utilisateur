@@ -1,0 +1,11 @@
+beans\WelcomeBean.class
+beans\SessionManager.class
+Business\SessionControlFilter.class
+com\mycompany\navigation\resources\JakartaEE10Resource.class
+beans\LieuBean.class
+beans\UtilisateurBean.class
+Business\UtilisateurEntrepriseBean.class
+com\mycompany\navigation\JakartaRestConfiguration.class
+beans\LieuBean$Lieu.class
+entities\Utilisateur.class
+beans\NavigationBean.class
