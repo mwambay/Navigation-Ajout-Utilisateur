@@ -2,7 +2,6 @@ beans\UtilisateurBean.class
 Business\LieuEntrepriseBean.class
 Business\UtilisateurEntrepriseBean.class
 com\mycompany\navigation\JakartaRestConfiguration.class
-entities\VisiteId.class
 beans\NavigationBean.class
 beans\WelcomeBean.class
 entities\Visite.class

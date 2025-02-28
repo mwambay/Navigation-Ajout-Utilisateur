@@ -53,7 +53,7 @@ public class VisiteBean implements Serializable {
         try {
             Visite visite = new Visite();
             visite.setIdUtilisateur(idUtilisateur.intValue()); // Conversion explicite
-            visite.setIdLieu(3);//); // Conversion explicite
+            visite.setIdLieu(idLieu.intValue());//); // Conversion explicite
             visite.setDateVisite(dateVisite);
             visite.setTempsPasse(tempsPasse);
             visite.setObservations(observations);

@@ -17,7 +17,7 @@ import org.mindrot.jbcrypt.BCrypt;
 
 /**
  *
- * @author Orman
+ * @author Jenovic Mwambay
  */
 @Named(value = "test")
 @RequestScoped
