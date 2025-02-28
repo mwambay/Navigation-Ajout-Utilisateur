@@ -1,4 +1,5 @@
-package beans;
+package Business;
+import entities.Utilisateur;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.faces.context.FacesContext;
 import jakarta.inject.Named;
@@ -26,5 +27,9 @@ public class SessionManager {
         if (session != null) {
             session.invalidate();
         }
+    }
+
+    public void createSession(String utilisateur, Utilisateur utilisateur0) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

@@ -1,0 +1,136 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core">
+    <h:head>
+        <title>Gestion des Visites</title>
+        <!-- Bootstrap 5 -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"/>
+        <!-- FontAwesome pour les icônes -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
+        <!-- jQuery -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <!-- Bootstrap JS -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    </h:head>
+    <h:body class="bg-light">
+
+        <div class="container mt-5">
+            <h1 class="text-center text-primary"><i class="fas fa-map-marker-alt"></i> Sélectionner un Lieu</h1>
+
+            <h:form class="mt-4">
+                <div class="form-group">
+                    <h:selectOneMenu value="#{lieuBean.selectedLieu}" styleClass="form-select">
+                        <f:selectItems value="#{lieuBean.lieux}" var="lieu"
+                                       itemValue="#{lieu.id}" itemLabel="#{lieu.nom}"/>
+                        <f:ajax listener="#{lieuBean.updateWeatherMessage}" render="weather"/>
+                    </h:selectOneMenu>
+                </div>
+            </h:form>
+
+            <!-- Affichage de la météo -->
+            <div class="mt-3">
+                <h:outputText id="weather" value="#{lieuBean.weatherMessage}"/>
+            </div>
+
+            <!-- Bouton "Visiter" -->
+            <h:form class="mt-3">
+                <h:commandButton value="Visiter" action="#{formulaireVisiteBean.afficherFormulaireVisite}" 
+                                 styleClass="btn btn-primary"/>
+            </h:form>
+        </div>
+
+        <!-- Formulaire de visite -->
+        <h:panelGroup rendered="#{formulaireVisiteBean.afficherFormulaireVisite}">
+            <div class="container mt-5">
+                <h2 class="text-center text-secondary"><i class="fas fa-edit"></i> Formulaire de Visite</h2>
+
+                <h:form>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="utilisateur">Utilisateur :</label>
+                                <h:inputText id="utilisateur" value="#{formulaireVisiteBean.nom}" 
+                                             required="true" styleClass="form-control" readonly="true"/>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="dateVisite">Date de visite :</label>
+                                <h:inputText id="dateVisite" value="#{formulaireVisiteBean.dateVisite}" 
+                                             required="true" styleClass="form-control">
+                                    <f:converter converterId="localDateTimeConverter"/>
+                                </h:inputText>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="tempsPasse">Temps passé (minutes) :</label>
+                                <h:inputText id="tempsPasse" value="#{formulaireVisiteBean.tempsPasse}" 
+                                             required="true" styleClass="form-control"/>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="depenses">Dépenses (€) :</label>
+                                <h:inputText id="depenses" value="#{formulaireVisiteBean.depenses}" 
+                                             styleClass="form-control"/>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label for="observations">Observations :</label>
+                                <h:inputTextarea id="observations" value="#{formulaireVisiteBean.observations}" 
+                                                 styleClass="form-control"/>
+                            </div>
+                        </div>
+
+                        <div class="col-12 text-center mt-4">
+                            <h:commandButton value="Enregistrer" action="#{formulaireVisiteBean.sauvegarderVisite}"
+                                             styleClass="btn btn-success"/>
+                        </div>
+                    </div>
+                </h:form>
+            </div>
+        </h:panelGroup>
+
+        <!-- Historique des visites -->
+        <div class="container mt-5">
+            <h2 class="text-center text-dark"><i class="fas fa-history"></i> Historique des Visites</h2>
+
+            <h:form class="text-center">
+                <h:commandButton value="Charger les visites" action="#{formulaireVisiteBean.chargerVisites}" 
+                                 styleClass="btn btn-primary"/>
+            </h:form>
+
+            <h:dataTable value="#{formulaireVisiteBean.visitesUtilisateur}" var="visite" styleClass="table table-striped mt-3">
+                <h:column>
+                    <f:facet name="header">ID Visite</f:facet>
+                    #{visite.id}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Lieu</f:facet>
+                    #{visite.lieu.nom}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Date</f:facet>
+                    #{visite.dateVisite}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Temps Passé (min)</f:facet>
+                    #{visite.tempsPasse}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Dépenses (€)</f:facet>
+                    #{visite.depenses}
+                </h:column>
+            </h:dataTable>
+        </div>
+
+    </h:body>
+</html>

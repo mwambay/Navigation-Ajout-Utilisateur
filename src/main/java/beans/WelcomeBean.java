@@ -4,6 +4,7 @@
  */
 package beans;
 
+import Business.SessionManager;
 import Business.UtilisateurEntrepriseBean;
 import entities.Utilisateur;
 import jakarta.annotation.PostConstruct;

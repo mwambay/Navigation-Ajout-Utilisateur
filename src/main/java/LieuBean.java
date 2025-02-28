@@ -1,92 +1,139 @@
 package beans;
 
-import jakarta.annotation.ManagedBean;
+import Business.LieuEntrepriseBean;
 import jakarta.enterprise.context.RequestScoped;
+import jakarta.faces.event.AjaxBehaviorEvent;
+import jakarta.inject.Inject;
 import jakarta.inject.Named;
+import jakarta.ws.rs.client.Client;
+import jakarta.ws.rs.client.ClientBuilder;
+import jakarta.ws.rs.core.MediaType;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-@ManagedBean
-@Named("lieuBean")
+@Named(value = "lieuBean")
 @RequestScoped
-public class LieuBean {
+public class LieuBean implements Serializable{
+    
     private String nom;
     private String description;
-    private double latitude;
     private double longitude;
-    private int indexToEdit = -1; // Index pour modifier un lieu
-    private static List<Lieu> listeLieux = new ArrayList<>();
+    private double latitude;
+    private String weatherMessage;
+    private int selectedLieu;
+    
+    private List<Lieu> lieux = new ArrayList<>();
 
-    // Getters et Setters
+    @Inject
+    private LieuEntrepriseBean lieuEntrepriseBean;
+    
+    private Lieu lieu;
+
     public String getNom() { return nom; }
     public void setNom(String nom) { this.nom = nom; }
 
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
 
-    public double getLatitude() { return latitude; }
-    public void setLatitude(double latitude) { this.latitude = latitude; }
-
     public double getLongitude() { return longitude; }
     public void setLongitude(double longitude) { this.longitude = longitude; }
 
-    public int getIndexToEdit() { return indexToEdit; }
-    public void setIndexToEdit(int indexToEdit) { this.indexToEdit = indexToEdit; }
+    public double getLatitude() { return latitude; }
+    public void setLatitude(double latitude) { this.latitude = latitude; }
 
-    public List<Lieu> getListeLieux() { return listeLieux; }
+    public List<Lieu> getLieux() { return lieuEntrepriseBean.listerTousLesLieux(); }
 
-    // Méthode pour ajouter/modifier un lieu
     public void ajouterLieu() {
-        Lieu lieu = new Lieu(nom, description, latitude, longitude);
-        if (indexToEdit >= 0) {
-            listeLieux.set(indexToEdit, lieu); // Modifier un lieu existant
-            indexToEdit = -1; // Réinitialiser l'index
-        } else {
-            listeLieux.add(lieu); // Ajouter un nouveau lieu
+        if (nom != null && !nom.isEmpty() && description != null && !description.isEmpty()) {
+            lieuEntrepriseBean.ajouterLieuEntreprise(nom, description, latitude, longitude);
         }
-        resetFields();
+    }
+        public void modifierLieu() {
+        if (lieu != null) {
+            lieuEntrepriseBean.modifierLieu(lieu);
+            resetFields();
+        }
     }
 
-    // Préparer la modification d'un lieu
-    public void prepareEdit(int index) {
-        Lieu lieu = listeLieux.get(index);
+    public void supprimerLieu(Lieu lieu) {
+        if (lieu != null) {
+            lieuEntrepriseBean.supprimerLieu(lieu.getId());
+        }
+    }
+    
+    private void resetFields() {
+        nom = null;
+        description = null;
+        latitude = 0;
+        longitude = 0;
+        lieu = null; // Réinitialiser le lieu
+    }
+    
+    public void selectLieu(Lieu lieu) {
+        this.lieu = lieu;
         this.nom = lieu.getNom();
         this.description = lieu.getDescription();
         this.latitude = lieu.getLatitude();
         this.longitude = lieu.getLongitude();
-        this.indexToEdit = index;
+    }
+    
+    
+    public void fetchWeatherMessage(Lieu l) {
+
+    if (l != null) {
+    // Appel au service web pour obtenir les données météorologiques
+
+    String serviceURL = "http:/localhost:8080/j-weater/webapi/JarkartaWeather?latitude="+ l.getLatitude() + "&longitude=" + l.getLongitude();
+    
+    Client client = ClientBuilder.newClient();
+    String response = client.target(serviceURL)
+    .request(MediaType.TEXT_PLAIN)
+    .get(String.class);
+
+    // Enregistrement du message météo dans la variable weatherMessage
+    this.weatherMessage =response;
+}
+
+}
+
+    public void updateWeatherMessage(AjaxBehaviorEvent event) {
+
+        Lieu lieu=lieuEntrepriseBean.trouverLieuParId(selectedLieu);
+        this.fetchWeatherMessage(lieu);
     }
 
-    // Supprimer un lieu
-    public void supprimerLieu(int index) {
-        listeLieux.remove(index);
+    public String getWeatherMessage() {
+    return weatherMessage;
     }
 
-    // Réinitialiser les champs du formulaire
-    private void resetFields() {
-        this.nom = "";
-        this.description = "";
-        this.latitude = 0.0;
-        this.longitude = 0.0;
+    public void setWeatherMessage(String weatherMessage) {
+        this.weatherMessage = weatherMessage;
     }
 
-    // Classe interne pour stocker les lieux
-    public static class Lieu {
-        private String nom;
-        private String description;
-        private double latitude;
-        private double longitude;
-
-        public Lieu(String nom, String description, double latitude, double longitude) {
-            this.nom = nom;
-            this.description = description;
-            this.latitude = latitude;
-            this.longitude = longitude;
-        }
-
-        public String getNom() { return nom; }
-        public String getDescription() { return description; }
-        public double getLatitude() { return latitude; }
-        public double getLongitude() { return longitude; }
+    public int getSelectedLieu() {
+        return selectedLieu;
     }
+
+    public void setSelectedLieu(int selectedLieu) {
+        this.selectedLieu = selectedLieu;
+    }
+
+    public LieuEntrepriseBean getLieuEntrepriseBean() {
+        return lieuEntrepriseBean;
+    }
+
+    public void setLieuEntrepriseBean(LieuEntrepriseBean lieuEntrepriseBean) {
+        this.lieuEntrepriseBean = lieuEntrepriseBean;
+    }
+
+    public Lieu getLieu() {
+        return lieu;
+    }
+
+    public void setLieu(Lieu lieu) {
+        this.lieu = lieu;
+    }
+    
+     
 }

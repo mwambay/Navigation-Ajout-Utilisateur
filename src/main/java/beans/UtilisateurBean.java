@@ -4,7 +4,9 @@
  */
 package beans;
 
+import Business.SessionManager;
 import Business.UtilisateurEntrepriseBean;
+import entities.Utilisateur;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
@@ -12,9 +14,8 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;;
-/**
+/*
  *
  * @author Jenovic Mwambay
  */
@@ -45,6 +46,9 @@ public class UtilisateurBean {
     
     @Inject
     private UtilisateurEntrepriseBean utilisateurEntrepriseBean;
+
+    @Inject
+    private SessionManager sessionManager;
 
     public String getEmail() {
         return email;
@@ -121,5 +125,17 @@ public class UtilisateurBean {
         password = "";
         description = "";
     
+    }
+
+    public String authentifier() {
+        Utilisateur utilisateur = utilisateurEntrepriseBean.authentifier(email, password);
+        if (utilisateur != null) {
+            sessionManager.createSession("utilisateur", utilisateur);
+            return "home"; // Rediriger vers la page d'accueil après connexion
+        } else {
+            FacesContext.getCurrentInstance().addMessage(null,
+                new FacesMessage(FacesMessage.SEVERITY_ERROR, "Email ou mot de passe incorrect", null));
+            return null;
+        }
     }
 }

@@ -51,4 +51,13 @@ public class NavigationBean {
             e.printStackTrace();
         }
     }
+        
+    public void guide(){
+        try{
+            FacesContext.getCurrentInstance().getExternalContext()
+                    .redirect("pages/guide.xhtml");
+        } catch(IOException e){
+            e.printStackTrace();
+        }
+    }
 }
